@@ -34,8 +34,8 @@ jobs:
           git config --global user.email "actions@github.com"
           
           # 2. Clone du dépôt GitOps (remplace SamGeek par ton user si besoin)
-          git clone https://${{ secrets.GIT_TOKEN }}@github.com/SamGeek/mon-app-gitops.git
-          cd mon-app-gitops
+          git clone https://${{ secrets.GIT_TOKEN }}@github.com/SamGeek/mon-app.git
+          cd mon-app
           
           # 3. Mise à jour du tag de l'image dans le YAML
           sed -i "s|image: .*|image: ${{ secrets.DOCKERHUB_USERNAME }}/mon-app:${{ github.sha }}|g" k8s/deployment.yaml
