@@ -9,7 +9,7 @@ app = Flask(__name__)
 @app.route('/')
 def hello_world():
     return f"""
-    <h1>CI/CD Opérationnel v2 ! Ton app tourne sur Kubernetes 🚀</h1>
+    <h1>CI/CD Opérationnel v3 ! Ton app tourne sur Kubernetes 🚀</h1>
     <p>Statut : En ligne et gérée par ArgoCD.</p>
     """
 
