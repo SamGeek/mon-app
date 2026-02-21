@@ -1,33 +1,44 @@
-name: CI - Build and Push to Docker Hub
+name: CI/CD Pipeline
 
-# Le pipeline se déclenche à chaque "push" sur la branche main
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-
     steps:
-      # 1. Récupérer le code du dépôt
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      # 2. Se connecter à Docker Hub en utilisant tes secrets
       - name: Login to Docker Hub
-        uses: docker/login-action@v3
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 3. Créer l'image et l'envoyer
-      - name: Build and push
-        uses: docker/build-push-action@v5
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          # Remplace 'mon-app' par le nom que tu veux donner à ton image
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/mon-app:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/mon-app:${{ github.sha }}
+          # On utilise le SHA du commit pour avoir un tag unique
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/mon-app:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/mon-app:latest
+
+      - name: Update GitOps Repo
+        run: |
+          # 1. Configuration de Git
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          
+          # 2. Clone du dépôt GitOps (remplace SamGeek par ton user si besoin)
+          git clone https://${{ secrets.GIT_TOKEN }}@github.com/SamGeek/mon-app-gitops.git
+          cd mon-app-gitops
+          
+          # 3. Mise à jour du tag de l'image dans le YAML
+          sed -i "s|image: .*|image: ${{ secrets.DOCKERHUB_USERNAME }}/mon-app:${{ github.sha }}|g" k8s/deployment.yaml
+          
+          # 4. Push des modifications
+          git add k8s/deployment.yaml
+          git commit -m "Update image to ${{ github.sha }} [skip ci]"
+          git push

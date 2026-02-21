@@ -47,3 +47,8 @@ Plus tard, pour voir ton application Flask sans faire de port-forward à chaque 
 
 Bash
 minikube addons enable ingress
+
+
+
+Lance cette commande pour permettre à ArgoCD de surveiller Docker Hub :
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/stable/config/install.yaml
