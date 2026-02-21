@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: mon-app
-        image: samgeek/mon-app:035ab7f3f1f1603fb9ab5249c31f35a811c58310
+        image: samgeek/mon-app:bab7f58c93ea3d233fd407ea0f45c02b18fc1e9d
         ports:
         - containerPort: 8000
