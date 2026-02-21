@@ -39,3 +39,11 @@ Si ce n'est pas déjà fait :
 Lance le tunnel : kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 Va sur https://localhost:8080 (Login: admin / Password: récupéré via le secret).
+
+
+
+5. Truc de pro : Activer l'Ingress sur Minikube
+Plus tard, pour voir ton application Flask sans faire de port-forward à chaque fois, tu auras besoin de l'Ingress. Active-le déjà avec cette commande :
+
+Bash
+minikube addons enable ingress
