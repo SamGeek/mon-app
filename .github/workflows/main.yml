@@ -26,6 +26,8 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/mon-app:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/mon-app:latest
 
       - name: Update GitOps Repo
+        env:
+            MY_TOKEN: ${{ secrets.GIT_TOKEN }}
         run: |
           # 1. Configuration de Git
           git config --global user.name "github-actions"
